@@ -78,5 +78,6 @@ if __name__ == '__main__':
     for x in range(len(sb)):
         if sb[x] != sc[x]:
             print('Error: solutions do not match')
+            exit()
 
     print('Checked: solutions match')
