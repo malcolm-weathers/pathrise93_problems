@@ -1,5 +1,8 @@
+# Find the least number of coins you can make a specific amount of change with.
+
 import time
 
+# Brute-force, slow.
 def change(amt, coins):
     if amt == 0:
         return []
@@ -16,11 +19,13 @@ def change(amt, coins):
             best = y
     return best
 
+# Dynamic programming, much faster.
 def change_dyn_r(amt, coins, dyn):
     if amt == 0:
         return []
     elif amt == 1:
         return [1]
+    # Don't run any repeat calculations.
     if dyn[amt] != -1:
         return dyn[amt]
 
@@ -34,6 +39,8 @@ def change_dyn_r(amt, coins, dyn):
     for p in possible[1:]:
         if len(p) < len(best):
             best = p
+    # Once we've found the optimal solution for amt=whatever, save it
+    # so we never calculate it again.
     dyn[amt] = best
     return best
 
