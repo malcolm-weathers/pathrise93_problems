@@ -19,37 +19,25 @@ def change(amt, coins):
             best = y
     return best
 
-# Dynamic programming, much faster.
-def change_dyn_r(amt, coins, dyn):
-    if amt == 0:
-        return []
-    elif amt == 1:
-        return [1]
-    # Don't run any repeat calculations.
-    if dyn[amt] != -1:
-        return dyn[amt]
-
-    possible = []
-    for coin in coins:
-        if coin > amt:
-            continue
-        possible.append([coin] + change_dyn_r(amt-coin, coins, dyn))
-
-    best = possible[0]
-    for p in possible[1:]:
-        if len(p) < len(best):
-            best = p
-    # Once we've found the optimal solution for amt=whatever, save it
-    # so we never calculate it again.
-    dyn[amt] = best
-    return best
-
+# Dynamic should be much faster.
 def change_dyn(amt, coins):
     dyn = []
     for x in range(amt+1):
-        dyn.append(-1)
-    return change_dyn_r(amt, coins, dyn)
-    
+        dyn.append([])
+
+    dyn[1] = [1]
+    for x in range(2, amt+1):
+        possible = []
+        for coin in coins:
+            if coin > x:
+                continue
+            possible.append(dyn[x-coin] + [coin])
+        best = possible[0]
+        for p in possible[1:]:
+            if len(p) < len(best):
+                best = p
+        dyn[x] = best
+    return dyn[amt]
 
 if __name__ == '__main__':
     n = int(input('Enter a number: '))
